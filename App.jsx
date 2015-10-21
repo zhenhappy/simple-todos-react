@@ -46,7 +46,9 @@ App = React.createClass({
     // 插入到数据库
     Tasks.insert({
       text: text,
-      createdAt: new Date() // 当前时间
+      createdAt: new Date(),            // 当前时间
+      owner: Meteor.userId(),           // 已登陆用户的_id
+      username: Meteor.user().username  // 已登陆用户的用户名
     });
 
     // 复原表单
@@ -74,12 +76,16 @@ App = React.createClass({
             Hide Completed Tasks
           </label>
 
-          <form className="new-task" onSubmit={this.handleSubmit} >
-            <input
-              type="text"
-              ref="textInput"
-              placeholder="Type to add new tasks" />
-          </form>
+          <AccountsUIWrapper />
+
+          { Meteor.userId() ?
+            <form className="new-task" onSubmit={this.handleSubmit} >
+              <input
+                type="text"
+                ref="textInput"
+                placeholder="Type to add new tasks" />
+            </form> : ''
+          }
         </header>
 
         <ul>

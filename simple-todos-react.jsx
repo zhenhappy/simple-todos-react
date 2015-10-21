@@ -5,6 +5,11 @@ Tasks = new Mongo.Collection("tasks");
 
 if(Meteor.isClient){
   //仅在前端执行的代码块
+
+  Accounts.ui.config({
+    passwordSignupFields: "USERNAME_ONLY"
+  });
+
   Meteor.startup(function () {
     // 在页面加载完成之后，使用 Meteor.startup 来渲染 React 组件
     React.render(<App />, document.getElementById("render-target"));
