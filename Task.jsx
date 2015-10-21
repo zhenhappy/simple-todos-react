@@ -3,7 +3,8 @@ Task = React.createClass({
   propTypes: {
     // 这个组件从React的prop中接受task并显示
     // 我们使用propTypes来表示这个属性是必须的
-    task: React.PropTypes.object.isRequired
+    task: React.PropTypes.object.isRequired,
+    showPrivateButton: React.PropTypes.bool.isRequired
   },
 
   toggleChecked() {
@@ -16,11 +17,17 @@ Task = React.createClass({
     Meteor.call("removeTask", this.props.task._id);
   },
 
+  togglePrivate() {
+    Meteor.call("setPrivate", this.props.task._id, ! this.props.task.private);
+  },
+
   render() {
     // 添加下面一行的内容
     // 当任务被完成的时候给它们一个不同的class
     // 这样，通过CSS中的设置后，它们会看起来更好一些。
-    const taskClassName = this.props.task.checked ? "checked" : "";
+    // 当我们需要的时候可以给“确认框”添加”私有“样式
+    const taskClassName = (this.props.task.checked ? "checked" : "") + " " +
+          (this.props.task.private ? "private" : "");
 
     return (
       <li className={taskClassName}>
@@ -33,6 +40,12 @@ Task = React.createClass({
           readOnly={true}
           checked={this.props.task.checked}
           onClick={this.toggleChecked} />
+
+        { this.props.showPrivateButton ? (
+          <button className="toggle-private" onClick={this.togglePrivate}>
+            { this.props.task.private ? "Private" : "Public" }
+          </button>
+        ) : ''}
 
         <span className="text">
           <strong>{this.props.task.username}</strong> : {this.props.task.text}

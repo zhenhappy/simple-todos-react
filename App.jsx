@@ -29,8 +29,17 @@ App = React.createClass({
 
   renderTasks() {
     // 从this.data中获取数据
+    console.log(Meteor.user());
+    console.log(Meteor.userId());
     return this.data.tasks.map((task) => {
-      return <Task key={task._id} task={task} />;
+      const currentUserId = Meteor.user() && Meteor.userId();
+      console.log(currentUserId);
+      const showPrivateButton = task.owner === currentUserId;
+
+      return <Task
+              key={task._id}
+              task={task}
+              showPrivateButton={showPrivateButton} />;
     });
   },
 
