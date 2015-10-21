@@ -8,13 +8,12 @@ Task = React.createClass({
 
   toggleChecked() {
     // 当按下按钮时，设定确认值为当前的相反值
-    Tasks.update(this.props.task._id, {
-      $set: {checked: ! this.props.task.checked}
-    });
+    Meteor.call("setChecked", this.props.task._id, ! this.props.task.checked);
   },
 
   deleteThisTask() {
-    Tasks.remove(this.props.task._id);
+    // 当按下删除按钮时, 删除指定的任务
+    Meteor.call("removeTask", this.props.task._id);
   },
 
   render() {

@@ -41,15 +41,10 @@ App = React.createClass({
 
     // 通过React的ref属性找到输入框的值
     var text = React.findDOMNode(this.refs.textInput).value.trim();
-    console.log(text);
+    console.log(Meteor.user().username + ':' + text);
 
     // 插入到数据库
-    Tasks.insert({
-      text: text,
-      createdAt: new Date(),            // 当前时间
-      owner: Meteor.userId(),           // 已登陆用户的_id
-      username: Meteor.user().username  // 已登陆用户的用户名
-    });
+    Meteor.call("addTask", text);
 
     // 复原表单
     React.findDOMNode(this.refs.textInput).value = "";
