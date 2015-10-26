@@ -23,17 +23,15 @@ App = React.createClass({
 
     return {
       tasks: Tasks.find(query, {sort: {createdAt: -1}}).fetch(),
-      incompleteCount: Tasks.find({checked: {$ne: true}}).count()
+      incompleteCount: Tasks.find({checked: {$ne: true}}).count(),
+      currentUser: Meteor.user()
     };
   },
 
   renderTasks() {
     // 从this.data中获取数据
-    console.log(Meteor.user());
-    console.log(Meteor.userId());
     return this.data.tasks.map((task) => {
       const currentUserId = Meteor.user() && Meteor.userId();
-      console.log(currentUserId);
       const showPrivateButton = task.owner === currentUserId;
 
       return <Task
@@ -82,7 +80,7 @@ App = React.createClass({
 
           <AccountsUIWrapper />
 
-          { Meteor.userId() ?
+          { this.data.currentUser ?
             <form className="new-task" onSubmit={this.handleSubmit} >
               <input
                 type="text"
